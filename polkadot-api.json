@@ -1,0 +1,6 @@
+{
+  "roc": {
+    "chain": "rococo_v2_2",
+    "metadata": "roc.scale"
+  }
+}
