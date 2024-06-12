@@ -1,8 +1,18 @@
-# Vue 3 + TypeScript + Vite
+# PolkaUI - Easy-To-Use-UI for Parachain Development
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+An easy-to-use UI for managing your parachain's upgrades and on-demand allocations.  Built using Vue + Vite + TypeScript + PAPI (VVTP ;)).
 
-## Recommended Setup
+## Install + Build + Run
+
+Install and dev server:
+
+```sh
+bun install
+# Run development server
+bun run dev
+```
+
+## Recommended CLI Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (previously Volar) and disable Vetur
 
