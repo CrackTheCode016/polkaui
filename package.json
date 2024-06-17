@@ -12,7 +12,8 @@
     "@polkadot-api/descriptors": "^0.0.1",
     "polkadot-api": "^0.8.0",
     "primevue": "^3.52.0",
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
