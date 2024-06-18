@@ -40,6 +40,9 @@ async function assignBalance() {
 
 <template>
     <Menubar :model="items">
+        <template #start>
+            <h3 class="logo">PolkaUI</h3>
+        </template>
         <template #item="{ item, props }">
             <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                 <a v-ripple :href="href" v-bind="props.action" @click="navigate">
@@ -60,3 +63,10 @@ async function assignBalance() {
         </template>
     </Menubar>
 </template>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
+h3 {
+    font-family: 'Unbounded', Inter, system-ui;
+}
+</style>

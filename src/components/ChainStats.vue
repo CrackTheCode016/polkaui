@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { Ref, compile, onBeforeMount, ref } from 'vue';
+import { Ref, onBeforeMount, ref } from 'vue';
 import Card from 'primevue/card';
-import Listbox from 'primevue/listbox';
 import { store } from '../store';
 import { roc } from "@polkadot-api/descriptors"
 import Dialog from 'primevue/dialog';
 import DataTable, { DataTableRowClickEvent } from 'primevue/datatable';
 import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';   // optional
-import Row from 'primevue/row';                   // optional
 
 interface Item {
     hash: string, height: string
@@ -25,8 +22,7 @@ store.client.finalizedBlock$.subscribe((info) => {
     blocks.value.unshift({ hash: info.hash, height: info.number.toString() });
 })
 
-onBeforeMount(async () => {
-});
+onBeforeMount(async () => {});
 
 function showDialog(block: DataTableRowClickEvent) {
     alert(block.data.hash);
