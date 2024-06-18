@@ -6,12 +6,15 @@ import Navbar from './components/Navbar.vue'
 <template>
   <Suspense>
     <Navbar />
+    <template #fallback>
+    Light client loading...
+  </template>
   </Suspense>
-  <div class="content">
-    <Suspense>
+  <Suspense>
+    <div class="content">
       <RouterView />
-    </Suspense>
-  </div>
+    </div>
+  </Suspense>
 </template>
 
 <style scoped></style>
