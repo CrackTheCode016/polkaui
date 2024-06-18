@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import Dropdown from 'primevue/dropdown';
+import Dropdown, { DropdownChangeEvent } from 'primevue/dropdown';
 import Menubar from 'primevue/menubar';
+import Badge from 'primevue/badge';
+import Chip from 'primevue/chip';
 import { ref } from "vue";
 import { store } from '../store';
+import { roc } from "@polkadot-api/descriptors"
 
 const items = ref([
     {
@@ -21,6 +24,15 @@ const items = ref([
 ]);
 
 const accounts = ref(store.pjsAccounts);
+const typedApi = store.client.getTypedApi(roc);
+const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
+let balance = ref(accountInfo.data.free);
+
+async function assignBalance() {
+    const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
+    balance.value = accountInfo.data.free;
+}
+
 </script>
 
 <template>
@@ -35,8 +47,12 @@ const accounts = ref(store.pjsAccounts);
         </template>
         <template #end>
             <div class="card flex justify-center">
+                <Chip class="py-0 pl-0 pr-4">
+                    <span class="ml-2 font-medium">{{ balance }}</span>
+                </Chip>
+                <Badge value="ROC"></Badge>
                 <Dropdown v-model="store.selectedAccount" :options="accounts" optionLabel="name"
-                    placeholder="Select account" class="w-full md:w-[14rem]" />
+                    @change="() => assignBalance()" placeholder="Select account" class="w-full md:w-[14rem]" />
             </div>
         </template>
     </Menubar>
