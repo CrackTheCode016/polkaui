@@ -49,11 +49,11 @@ async function assignBalance() {
             </router-link>
         </template>
         <template #end>
-            <div class="card flex justify-center">
-                <Chip class="py-0 pl-0 pr-4">
-                    <span class="ml-2 font-medium">{{ balance == BigInt(0) ? "Loading" : balance }}</span>
+            <div class="flex">
+                <Chip class="mr-2">
+                    <span class="mr-2 ml-2 font-medium">{{ balance == BigInt(0) ? "Loading" : balance }}</span>
+                    <Badge value="ROC"></Badge>
                 </Chip>
-                <Badge value="ROC"></Badge>
                 <Dropdown v-model="store.selectedAccount" :options="accounts" optionLabel="name"
                     @change="() => assignBalance()" placeholder="Select account" class="w-full md:w-[14rem]" />
             </div>

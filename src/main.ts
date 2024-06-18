@@ -7,6 +7,7 @@ import { createRouter, createMemoryHistory } from 'vue-router';
 import ChainStats from './components/ChainStats.vue';
 import Upgrade from './components/Upgrade.vue';
 import OnDemand from './components/OnDemand.vue';
+import "primeflex/primeflex.css";
 
 const routes = [
     { path: '/', component: ChainStats },
