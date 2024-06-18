@@ -7,13 +7,16 @@ import Navbar from './components/Navbar.vue'
   <Suspense>
     <Navbar />
     <template #fallback>
-    Light client loading...
-  </template>
+      Light client loading...
+    </template>
   </Suspense>
   <Suspense>
-    <div class="content">
-      <RouterView />
+    <div class="content p-6">
+      <RouterView class="overflow-hidden" />
     </div>
+    <template #fallback>
+      Light client loading...
+    </template>
   </Suspense>
 </template>
 
