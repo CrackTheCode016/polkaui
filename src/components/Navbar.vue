@@ -13,12 +13,12 @@ const items = ref([
         route: '/',
     },
     {
-        label: 'On-Demand',
+        label: 'Upgrade',
         route: '/upgrade',
 
     },
     {
-        label: 'Ordering',
+        label: 'Order Coretime',
         route: '/ondemand',
     }
 ]);
