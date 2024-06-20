@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall" : "npx papi add dot -n polkadot && npx papi"
   },
   "dependencies": {
     "@polkadot-api/descriptors": "^0.0.1",
