@@ -2,35 +2,43 @@
 import { Ref, onBeforeMount, ref } from 'vue';
 import Card from 'primevue/card';
 import { store } from '../store';
-import { roc } from "@polkadot-api/descriptors"
 import Dialog from 'primevue/dialog';
 import DataTable, { DataTableRowClickEvent } from 'primevue/datatable';
 import Column from 'primevue/column';
 
-interface Item {
+interface Block {
     hash: string, height: string
 }
 
 let blockHeight = ref(0);
+const visible = ref(false);
 let blockHash = ref("");
-let blocks: Ref<Item[]> = ref([]);
+let blocks: Ref<Block[]> = ref([]);
+let selectedBlock: Ref<Block | null> = ref(null);
 
-const typedApi = store.client.getTypedApi(roc);
 store.client.finalizedBlock$.subscribe((info) => {
     blockHeight.value = info.number;
     blockHash.value = info.hash;
     blocks.value.unshift({ hash: info.hash, height: info.number.toString() });
 })
 
-onBeforeMount(async () => {});
-
-function showDialog(block: DataTableRowClickEvent) {
-    alert(block.data.hash);
+async function showDialog(block: DataTableRowClickEvent) {
+    console.log(block);
+    visible.value = true;
+    selectedBlock.value = { hash: block.data.hash, height: block.data.height };
 }
+
 </script>
 
 <template>
     <div class="grid flex">
+        <Dialog v-model:visible="visible" modal header="Block Information">
+            <div>
+                <b>Block Height: {{ selectedBlock?.height }}</b>
+                <hr>
+                <b>Block Hash: {{ selectedBlock?.hash }}</b>
+            </div>
+        </Dialog>
         <Card class="col m-2 bg-primary">
             <template #title>{{ blockHeight }}</template>
             <template #content>
@@ -52,7 +60,6 @@ function showDialog(block: DataTableRowClickEvent) {
                 <Column field="height" header="Height"></Column>
                 <Column field="hash" header="Hash"></Column>
             </DataTable>
-
         </div>
     </div>
 </template>

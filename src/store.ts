@@ -15,6 +15,7 @@ const pJsaccounts = pjs.getAccounts();
 
 const smoldot = startFromWorker(new SmWorker());
 const chain = await smoldot.addChain({ chainSpec });
+
 const client = createClient(
   getSmProvider(chain)
 );

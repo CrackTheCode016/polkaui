@@ -18,7 +18,7 @@ const items = ref([
 
     },
     {
-        label: 'Order Coretime',
+        label: 'Produce Blocks',
         route: '/ondemand',
     }
 ]);
@@ -31,6 +31,7 @@ onBeforeMount(async () => {
     const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
     balance.value = accountInfo.data.free;
 });
+
 async function assignBalance() {
     const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
     balance.value = accountInfo.data.free;
