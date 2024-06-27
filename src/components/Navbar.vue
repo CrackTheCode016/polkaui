@@ -6,6 +6,7 @@ import Chip from 'primevue/chip';
 import { onBeforeMount, ref } from "vue";
 import { store } from '../store';
 import { roc } from "@polkadot-api/descriptors"
+import { formatBalance } from "@polkadot/util";
 
 const items = ref([
     {
@@ -25,16 +26,17 @@ const items = ref([
 
 const accounts = ref(store.pjsAccounts);
 const typedApi = store.client.getTypedApi(roc);
-let balance = ref(BigInt(0));
+const balanceFormatOptions = { withUnit: false, withZeros: false, decimals: 12 };
+let balance = ref("");
 
 onBeforeMount(async () => {
     const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
-    balance.value = accountInfo.data.free;
+    balance.value = formatBalance(accountInfo.data.free, balanceFormatOptions).replace(' ', '');
 });
 
 async function assignBalance() {
     const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
-    balance.value = accountInfo.data.free;
+    balance.value = formatBalance(accountInfo.data.free, balanceFormatOptions).replace(' ', '');
 }
 
 </script>
@@ -55,7 +57,7 @@ async function assignBalance() {
         <template #end>
             <div class="flex">
                 <Chip class="mr-2">
-                    <span class="mr-2 ml-2 font-medium">{{ balance == BigInt(0) ? "Loading" : balance }}</span>
+                    <span class="mr-2 ml-2 font-small">{{ balance == "" ? "Loading" : balance }}</span>
                     <Badge value="ROC"></Badge>
                 </Chip>
                 <Dropdown v-model="store.selectedAccount" :options="accounts" optionLabel="name"
@@ -67,6 +69,7 @@ async function assignBalance() {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
+
 h3 {
     font-family: 'Unbounded', Inter, system-ui;
 }
