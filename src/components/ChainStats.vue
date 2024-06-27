@@ -54,7 +54,6 @@ async function showDialog(block: DataTableRowClickEvent) {
     </div>
     <div class="grid flex">
         <div class="col m-2">
-            Blocks
             <DataTable paginator :rows="5" :rowHover="true"
                 @row-click="(event: DataTableRowClickEvent) => showDialog(event)" :value="blocks">
                 <Column field="height" header="Height"></Column>

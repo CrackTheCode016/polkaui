@@ -21,6 +21,7 @@ const client = createClient(
 );
 
 export const store = reactive({
+  loading: true,
   client: client,
   pjsAccounts: pJsaccounts,
   selectedAccount: pJsaccounts[0]

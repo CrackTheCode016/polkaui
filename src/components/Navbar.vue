@@ -32,6 +32,7 @@ let balance = ref("");
 onBeforeMount(async () => {
     const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
     balance.value = formatBalance(accountInfo.data.free, balanceFormatOptions).replace(' ', '');
+    store.loading = false;
 });
 
 async function assignBalance() {
