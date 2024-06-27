@@ -19,6 +19,10 @@ let selectedBlock: Ref<Block | null> = ref(null);
 store.client.finalizedBlock$.subscribe((info) => {
     blockHeight.value = info.number;
     blockHash.value = info.hash;
+    // limits to 10 max pages of data
+    if (blocks.value.length >= 70) {
+        blocks.value = [];
+    }
     blocks.value.unshift({ hash: info.hash, height: info.number.toString() });
 })
 
@@ -54,7 +58,7 @@ async function showDialog(block: DataTableRowClickEvent) {
     </div>
     <div class="grid flex">
         <div class="col m-2">
-            <DataTable paginator :rows="5" :rowHover="true"
+            <DataTable paginator :rows="7" :rowHover="true"
                 @row-click="(event: DataTableRowClickEvent) => showDialog(event)" :value="blocks">
                 <Column field="height" header="Height"></Column>
                 <Column field="hash" header="Hash"></Column>
