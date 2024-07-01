@@ -10,6 +10,7 @@ type Transaction = PolkadotApiTransaction<any, any, any, any>;
 const props = defineProps<{
     call: Transaction | Transaction[]
     batch: boolean,
+    rpc?: string
 }>()
 
 const typedApi = store.client.getTypedApi(roc);

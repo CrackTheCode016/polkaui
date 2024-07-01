@@ -12,6 +12,7 @@
   "dependencies": {
     "@polkadot-api/descriptors": "^0.0.1",
     "@polkadot/util": "^12.6.2",
+    "@polkadot/util-crypto": "^12.6.2",
     "polkadot-api": "^0.8.0",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
