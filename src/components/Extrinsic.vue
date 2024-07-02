@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Toast from 'primevue/toast';
-import { Transaction as PolkadotApiTransaction } from 'polkadot-api';
+import { Transaction as PolkadotApiTransaction, TxEvent } from 'polkadot-api';
 import { roc } from "@polkadot-api/descriptors"
 import { store } from '../store';
 import { useToast } from "primevue/usetoast";
@@ -17,6 +17,16 @@ const props = defineProps<{
 }>()
 
 const typedApi = store.client.getTypedApi(roc);
+
+function handleEvents(event: TxEvent) {
+    console.log(event);
+    if (event.type == 'broadcasted' || event.type == 'signed' || event.type == 'txBestBlocksState') {
+        toast.add({ severity: 'info', summary: event.txHash, detail: event.type, life: 3000 });
+    } else {
+        toast.add({ severity: 'success', summary: event.txHash, detail: event.type, life: 3000 });
+    }
+}
+
 function send() {
     if (props.batch) {
         let transactions = props.call as Transaction[];
@@ -24,27 +34,16 @@ function send() {
         typedApi.tx.Utility.batch({ calls })
             .signSubmitAndWatch(store.selectedAccount.polkadotSigner)
             .subscribe({
-                next: (event) => {
-                    console.log(event);
-                    if (event.type == 'broadcasted' || event.type == 'signed' || event.type == 'txBestBlocksState') {
-                        toast.add({ severity: 'info', summary: event.txHash, detail: event.type, life: 3000 });
-                    } else {
-                        toast.add({ severity: 'success', summary: event.txHash, detail: event.type, life: 3000 });
-                    }
-                },
-                error: (e) => {
-                    console.error(e);
-                    toast.add({ severity: 'error', summary: 'Error', detail: e, life: 3000 });
-                },
+                next: (event) => handleEvents(event),
+                error: (e) => toast.add({ severity: 'error', summary: 'Error', detail: e, life: 3000 }),
             })
     } else {
         const call = props.call as Transaction;
         call
             .signSubmitAndWatch(store.selectedAccount.polkadotSigner)
             .subscribe({
-                next: (event) => {
-                },
-                error: console.error,
+                next: (event) => handleEvents(event),
+                error: (e) => toast.add({ severity: 'error', summary: 'Error', detail: e, life: 3000 }),
             })
     }
 }
