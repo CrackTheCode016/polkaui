@@ -8,7 +8,8 @@ import ChainStats from './components/ChainStats.vue';
 import Upgrade from './components/Upgrade.vue';
 import OnDemand from './components/OnDemand.vue';
 import "primeflex/primeflex.css";
-import 'primeicons/primeicons.css'
+import 'primeicons/primeicons.css';
+import ToastService from 'primevue/toastservice';
 
 const routes = [
     { path: '/', component: ChainStats },
@@ -21,4 +22,4 @@ const router = createRouter({
     routes,
 })
 
-createApp(App).use(PrimeVue).use(router).mount('#app')
+createApp(App).use(PrimeVue).use(router).use(ToastService).mount('#app')

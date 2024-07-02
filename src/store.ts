@@ -25,5 +25,4 @@ export const store = reactive({
   client: client,
   pjsAccounts: pJsaccounts,
   selectedAccount: pJsaccounts[0],
-  hashes: new Map<string, string>()
 })
