@@ -8,7 +8,7 @@ import { Binary } from 'polkadot-api';
 import Card from 'primevue/card';
 import FileUpload from 'primevue/fileupload';
 const rpCurl = ref("wss://rpc.web3educhain.xyz:443");
-const typedApi = store.client.getTypedApi(roc);
+const typedApi = store.relayClient.getTypedApi(roc);
 const call = typedApi.tx.System.remark({ remark: Binary.fromText("hi") });
 
 </script>

@@ -32,7 +32,7 @@ type Transaction = PolkadotApiTransaction<any, any, any, any>;
 const maxAmount = BigInt(1000000000000);
 const paraID = ref();
 const blocks = ref(0);
-const typedApi = store.client.getTypedApi(roc);
+const typedApi = store.relayClient.getTypedApi(roc);
 
 function orderCoretime() {
     let calls: Transaction[] = [];

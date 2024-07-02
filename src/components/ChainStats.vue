@@ -16,7 +16,7 @@ let blockHash = ref("");
 let blocks: Ref<Block[]> = ref([]);
 let selectedBlock: Ref<Block | null> = ref(null);
 
-store.client.finalizedBlock$.subscribe((info) => {
+store.relayClient.finalizedBlock$.subscribe((info) => {
     blockHeight.value = info.number;
     blockHash.value = info.hash;
     // limits to 10 max pages of data

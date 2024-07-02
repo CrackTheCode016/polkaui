@@ -25,7 +25,7 @@ const items = ref([
 ]);
 
 const accounts = ref(store.pjsAccounts);
-const typedApi = store.client.getTypedApi(roc);
+const typedApi = store.relayClient.getTypedApi(roc);
 const balanceFormatOptions = { withUnit: false, withZeros: false, decimals: 12 };
 let balance = ref("");
 

@@ -16,14 +16,16 @@ const props = defineProps<{
     rpc?: string
 }>()
 
-const typedApi = store.client.getTypedApi(roc);
+const typedApi = store.relayClient.getTypedApi(roc);
 
 function handleEvents(event: TxEvent) {
     console.log(event);
     if (event.type == 'broadcasted' || event.type == 'signed' || event.type == 'txBestBlocksState') {
         toast.add({ severity: 'info', summary: event.txHash, detail: event.type, life: 3000 });
-    } else {
+    } else if (event.type == 'finalized') {
         toast.add({ severity: 'success', summary: event.txHash, detail: event.type, life: 3000 });
+    } else {
+        toast.add({ severity: 'info', summary: "Unknown", detail: "Unknown", life: 3000 });
     }
 }
 
@@ -50,6 +52,8 @@ function send() {
 </script>
 
 <template>
-    <Button label="Submit" @click="send()" />
-    <Toast />
+    <div>
+        <Button label="Submit" @click="send()" />
+        <Toast />
+    </div>
 </template>
