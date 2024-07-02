@@ -11,7 +11,7 @@ import { store } from './store';
     <RouterView class="overflow-hidden" />
   </div>
   <div v-else="!store.loading" class="content p-6">
-    <h3>Loading Light Client...</h3>
+    <h3>Syncing network...</h3>
     <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
       aria-label="Custom ProgressSpinner" />
   </div>

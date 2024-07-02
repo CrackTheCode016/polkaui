@@ -3,8 +3,9 @@ import Dropdown from 'primevue/dropdown';
 import Menubar from 'primevue/menubar';
 import Badge from 'primevue/badge';
 import Chip from 'primevue/chip';
+import SelectButton from 'primevue/selectbutton';
 import { onBeforeMount, ref } from "vue";
-import { store } from '../store';
+import { educhainRpc, modifyParaClientInStore, store } from '../store';
 import { roc } from "@polkadot-api/descriptors"
 import { formatBalance } from "@polkadot/util";
 
@@ -24,8 +25,12 @@ const items = ref([
     }
 ]);
 
+const chain = ref('EduChain');
+const options = ref(['EduChain', 'Local']);
+
 const accounts = ref(store.pjsAccounts);
 const typedApi = store.relayClient.getTypedApi(roc);
+const ticker = ref("ROC");
 const balanceFormatOptions = { withUnit: false, withZeros: false, decimals: 12 };
 let balance = ref("");
 
@@ -38,6 +43,17 @@ onBeforeMount(async () => {
 async function assignBalance() {
     const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
     balance.value = formatBalance(accountInfo.data.free, balanceFormatOptions).replace(' ', '');
+}
+
+function switchNetworks() {
+    if (chain.value == 'EduChain') {
+        modifyParaClientInStore(educhainRpc);
+    } else if (chain.value == 'Local') {
+        modifyParaClientInStore("ws://localhost:9944");
+    } else {
+        // Default to EduChain for now
+        modifyParaClientInStore(educhainRpc);
+    }
 }
 
 </script>
@@ -57,12 +73,21 @@ async function assignBalance() {
         </template>
         <template #end>
             <div class="flex">
-                <Chip class="mr-2">
-                    <span class="mr-2 ml-2 font-small">{{ balance == "" ? "Loading" : balance }}</span>
-                    <Badge value="ROC"></Badge>
-                </Chip>
-                <Dropdown v-model="store.selectedAccount" :options="accounts" optionLabel="name"
-                    @change="() => assignBalance()" placeholder="Select account" class="w-full md:w-[14rem]" />
+                <div>
+                    <SelectButton v-on:change="switchNetworks()" v-model="chain" :options="options" />
+                </div>
+                <div class="flex ml-2">
+                    <Chip class="mr-2">
+                        <i v-if="store.loading" class="pi pi-spin pi-spinner"
+                            style="font-size: 1rem; color: 'var(--p-primary-color)'"></i>
+                        <div class="flex" v-else>
+                            <span class="mr-2 ml-2 font-small">{{ balance == "" ? "Loading" : balance }}</span>
+                            <Badge :value="ticker"></Badge>
+                        </div>
+                    </Chip>
+                    <Dropdown v-model="store.selectedAccount" :options="accounts" optionLabel="name"
+                        @change="() => assignBalance()" placeholder="Select account" class="w-full md:w-[14rem]" />
+                </div>
             </div>
         </template>
     </Menubar>

@@ -13,6 +13,7 @@ while (!getInjectedExtensions()?.includes("polkadot-js"))
 
 const pjs = await connectInjectedExtension("polkadot-js");
 const pJsaccounts = pjs.getAccounts();
+export const educhainRpc: string = "wss://rpc.web3educhain.xyz";
 
 const smoldot = startFromWorker(new SmWorker());
 const relay = await smoldot.addChain({ chainSpec: rococo });
@@ -20,16 +21,22 @@ const relayClient = createClient(
   getSmProvider(relay)
 );
 
-const jsonRpcProvider = WebSocketProvider("wss://rpc.web3educhain.xyz")
-
-const paraClient = createClient(
-  jsonRpcProvider
-);
+export const createParaClient = (rpc: string) => {
+  const jsonRpcProvider = WebSocketProvider(rpc)
+  return createClient(
+    jsonRpcProvider
+  );
+};
 
 export const store = reactive({
   loading: true,
   relayClient,
-  paraClient,
+  paraClient: createParaClient(educhainRpc),
   pjsAccounts: pJsaccounts,
   selectedAccount: pJsaccounts[0],
 })
+
+export const modifyParaClientInStore = (rpc: string) => {
+  store.paraClient.destroy();
+  store.paraClient = createParaClient(rpc);
+}
