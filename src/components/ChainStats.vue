@@ -5,6 +5,7 @@ import { store } from '../store';
 import Dialog from 'primevue/dialog';
 import DataTable, { DataTableRowClickEvent } from 'primevue/datatable';
 import Column from 'primevue/column';
+import { edu } from '@polkadot-api/descriptors';
 
 interface Block {
     hash: string, height: string
@@ -13,10 +14,12 @@ interface Block {
 let blockHeight = ref(0);
 const visible = ref(false);
 let blockHash = ref("");
+let lastProduced = ref("");
 let blocks: Ref<Block[]> = ref([]);
 let selectedBlock: Ref<Block | null> = ref(null);
+const paraTypedApi = store.paraClient.getTypedApi(edu);
 
-store.relayClient.finalizedBlock$.subscribe((info) => {
+store.paraClient.finalizedBlock$.subscribe((info) => {
     blockHeight.value = info.number;
     blockHash.value = info.hash;
     // limits to 10 max pages of data
@@ -24,6 +27,11 @@ store.relayClient.finalizedBlock$.subscribe((info) => {
         blocks.value = [];
     }
     blocks.value.unshift({ hash: info.hash, height: info.number.toString() });
+})
+
+paraTypedApi.query.Timestamp.Now.watchValue().subscribe((stamp) => {
+    const lastBlockTime = new Date(Number(stamp));
+    lastProduced.value = lastBlockTime.toTimeString()
 })
 
 async function showDialog(block: DataTableRowClickEvent) {
@@ -43,6 +51,12 @@ async function showDialog(block: DataTableRowClickEvent) {
                 <b>Block Hash: {{ selectedBlock?.hash }}</b>
             </div>
         </Dialog>
+        <Card class="col m-2 bg-secondary">
+            <template #title>{{ lastProduced }}</template>
+            <template #content>
+                Last Block Produced
+            </template>
+        </Card>
         <Card class="col m-2 bg-primary">
             <template #title>{{ blockHeight }}</template>
             <template #content>

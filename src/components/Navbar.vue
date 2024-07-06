@@ -6,7 +6,7 @@ import Chip from 'primevue/chip';
 import SelectButton from 'primevue/selectbutton';
 import { onBeforeMount, ref } from "vue";
 import { educhainRpc, modifyParaClientInStore, store } from '../store';
-import { roc } from "@polkadot-api/descriptors"
+import { edu, roc } from "@polkadot-api/descriptors"
 import { formatBalance } from "@polkadot/util";
 
 const items = ref([
@@ -29,20 +29,24 @@ const chain = ref('EduChain');
 const options = ref(['EduChain', 'Local']);
 
 const accounts = ref(store.pjsAccounts);
-const typedApi = store.relayClient.getTypedApi(roc);
+const relayTypedApi = store.relayClient.getTypedApi(roc);
+const paraTypedApi =  store.paraClient.getTypedApi(edu);
 const ticker = ref("ROC");
+const paraTicker = ref("EDU");
 const balanceFormatOptions = { withUnit: false, withZeros: false, decimals: 12 };
 let balance = ref("");
+let paraBalance = ref("");
 
 onBeforeMount(async () => {
-    const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
-    balance.value = formatBalance(accountInfo.data.free, balanceFormatOptions).replace(' ', '');
+    await assignBalance();
     store.loading = false;
 });
 
 async function assignBalance() {
-    const accountInfo = await typedApi.query.System.Account.getValue(store.selectedAccount.address);
+    const paraAccountInfo = await paraTypedApi.query.System.Account.getValue(store.selectedAccount.address);
+    const accountInfo = await relayTypedApi.query.System.Account.getValue(store.selectedAccount.address);
     balance.value = formatBalance(accountInfo.data.free, balanceFormatOptions).replace(' ', '');
+    paraBalance.value = formatBalance(paraAccountInfo.data.free, balanceFormatOptions).replace(' ', '');
 }
 
 function switchNetworks() {
@@ -83,6 +87,14 @@ function switchNetworks() {
                         <div class="flex" v-else>
                             <span class="mr-2 ml-2 font-small">{{ balance == "" ? "Loading" : balance }}</span>
                             <Badge :value="ticker"></Badge>
+                        </div>
+                    </Chip>
+                    <Chip class="mr-2">
+                        <i v-if="store.loading" class="pi pi-spin pi-spinner"
+                            style="font-size: 1rem; color: 'var(--p-primary-color)'"></i>
+                        <div class="flex" v-else>
+                            <span class="mr-2 ml-2 font-small">{{ paraBalance == "" ? "Loading" : paraBalance }}</span>
+                            <Badge severity="success" :value="paraTicker"></Badge>
                         </div>
                     </Chip>
                     <Dropdown v-model="store.selectedAccount" :options="accounts" optionLabel="name"

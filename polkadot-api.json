@@ -2,5 +2,9 @@
   "roc": {
     "chain": "rococo_v2_2",
     "metadata": "roc.scale"
+  },
+  "edu": {
+    "wsUrl": "wss://rpc.web3educhain.xyz",
+    "metadata": "edu.scale"
   }
 }
