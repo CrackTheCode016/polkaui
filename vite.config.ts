@@ -6,5 +6,8 @@ export default defineConfig({
   build: {
     target: 'esnext'
   },
+  server: {
+    host: true
+  },
   plugins: [vue()],
 })
