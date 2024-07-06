@@ -17,7 +17,13 @@ let blockHash = ref("");
 let lastProduced = ref("");
 let blocks: Ref<Block[]> = ref([]);
 let selectedBlock: Ref<Block | null> = ref(null);
+let paraId = ref("");
 const paraTypedApi = store.paraClient.getTypedApi(edu);
+
+onBeforeMount(async () => {
+    const id = await paraTypedApi.query.ParachainInfo.ParachainId.getValue();
+    paraId.value = id.toString();
+})
 
 store.paraClient.finalizedBlock$.subscribe((info) => {
     blockHeight.value = info.number;
@@ -31,7 +37,7 @@ store.paraClient.finalizedBlock$.subscribe((info) => {
 
 paraTypedApi.query.Timestamp.Now.watchValue().subscribe((stamp) => {
     const lastBlockTime = new Date(Number(stamp));
-    lastProduced.value = lastBlockTime.toTimeString()
+    lastProduced.value = lastBlockTime.toUTCString();
 })
 
 async function showDialog(block: DataTableRowClickEvent) {
@@ -55,6 +61,12 @@ async function showDialog(block: DataTableRowClickEvent) {
             <template #title>{{ lastProduced }}</template>
             <template #content>
                 Last Block Produced
+            </template>
+        </Card>
+        <Card class="col m-2 bg-secondary">
+            <template #title>{{ paraId }}</template>
+            <template #content>
+                Parachain ID
             </template>
         </Card>
         <Card class="col m-2 bg-primary">
