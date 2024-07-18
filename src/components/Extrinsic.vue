@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Toast from 'primevue/toast';
-import { Transaction as PolkadotApiTransaction, TxEvent } from 'polkadot-api';
+import { ChainDefinition, Transaction as PolkadotApiTransaction, TxEvent } from 'polkadot-api';
 import { roc } from "@polkadot-api/descriptors"
 import { store } from '../store';
 import { useToast } from "primevue/usetoast";
+import { TypedApi } from 'polkadot-api';
 const toast = useToast();
 
 // Any transaction, any!
@@ -13,10 +14,18 @@ type Transaction = PolkadotApiTransaction<any, any, any, any>;
 const props = defineProps<{
     call: Transaction | Transaction[]
     batch: boolean,
+    para: boolean,
+    text: string,
     rpc?: string
 }>()
 
-const typedApi = store.relayClient.getTypedApi(roc);
+let typedApi: any
+
+if (props.para) {
+    typedApi = store.paraClient.getTypedApi(roc);
+} else {
+    typedApi = store.relayClient.getTypedApi(roc);
+}
 
 function handleEvents(event: TxEvent) {
     console.log(event);
@@ -36,8 +45,8 @@ function send() {
         typedApi.tx.Utility.batch({ calls })
             .signSubmitAndWatch(store.selectedAccount.polkadotSigner)
             .subscribe({
-                next: (event) => handleEvents(event),
-                error: (e) => toast.add({ severity: 'error', summary: 'Error', detail: e, life: 3000 }),
+                next: (event: any) => handleEvents(event),
+                error: (e: any) => toast.add({ severity: 'error', summary: 'Error', detail: e, life: 3000 }),
             })
     } else {
         const call = props.call as Transaction;
@@ -53,7 +62,7 @@ function send() {
 
 <template>
     <div>
-        <Button label="Submit" @click="send()" />
+        <Button :label="props.text" @click="send()" />
         <Toast />
     </div>
 </template>

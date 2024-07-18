@@ -12,7 +12,7 @@
                     <InputText v-model="paraID" placeholder="ParaID" />
                     <InputText v-model="blocks" placeholder="Amount of Blocks" />
                 </div>
-                <Extrinsic class="m-2" :call="orderCoretime()" :batch="true" />
+                <Extrinsic class="m-2" :call="orderCoretime()" :batch="true" :para="false" text="Order"/>
             </template>
         </Card>
     </div>
