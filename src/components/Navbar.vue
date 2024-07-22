@@ -6,7 +6,7 @@ import Chip from 'primevue/chip';
 import SelectButton from 'primevue/selectbutton';
 import { onBeforeMount, ref } from "vue";
 import { educhainRpc, modifyParaClientInStore, store } from '../store';
-import { edu, roc } from "@polkadot-api/descriptors"
+import { edu, roc, testchain } from "@polkadot-api/descriptors"
 import { formatBalance } from "@polkadot/util";
 
 const items = ref([
@@ -53,7 +53,7 @@ function switchNetworks() {
     if (chain.value == 'EduChain') {
         modifyParaClientInStore(educhainRpc);
     } else if (chain.value == 'Local') {
-        modifyParaClientInStore("ws://localhost:9944");
+        modifyParaClientInStore("ws://127.0.0.1:8833");
     } else {
         // Default to EduChain for now
         modifyParaClientInStore(educhainRpc);

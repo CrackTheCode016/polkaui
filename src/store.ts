@@ -13,7 +13,7 @@ while (!getInjectedExtensions()?.includes("polkadot-js"))
 
 const pjs = await connectInjectedExtension("polkadot-js");
 const pJsaccounts = pjs.getAccounts();
-export const educhainRpc: string = "wss://rpc.web3educhain.xyz";
+export const educhainRpc: string = "ws://127.0.0.1:8833";
 
 const smoldot = startFromWorker(new SmWorker());
 const relay = await smoldot.addChain({ chainSpec: rococo });

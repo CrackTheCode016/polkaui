@@ -2,7 +2,7 @@
 import Button from 'primevue/button';
 import Toast from 'primevue/toast';
 import { ChainDefinition, Transaction as PolkadotApiTransaction, TxEvent } from 'polkadot-api';
-import { roc } from "@polkadot-api/descriptors"
+import { edu, roc, testchain } from "@polkadot-api/descriptors"
 import { store } from '../store';
 import { useToast } from "primevue/usetoast";
 import { TypedApi } from 'polkadot-api';
@@ -19,12 +19,10 @@ const props = defineProps<{
     rpc?: string
 }>()
 
-let typedApi: any
-
+let typedApi = store.relayClient.getTypedApi(testchain);
 if (props.para) {
-    typedApi = store.paraClient.getTypedApi(roc);
-} else {
-    typedApi = store.relayClient.getTypedApi(roc);
+    console.log("parachain detected")
+    typedApi = store.paraClient.getTypedApi(testchain);
 }
 
 function handleEvents(event: TxEvent) {
@@ -50,6 +48,7 @@ function send() {
             })
     } else {
         const call = props.call as Transaction;
+        console.log(call)
         call
             .signSubmitAndWatch(store.selectedAccount.polkadotSigner)
             .subscribe({

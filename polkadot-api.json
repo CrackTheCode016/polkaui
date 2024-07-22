@@ -6,5 +6,9 @@
   "edu": {
     "wsUrl": "wss://rpc.web3educhain.xyz",
     "metadata": "edu.scale"
+  },
+  "testchain": {
+    "wsUrl": "ws://127.0.0.1:8833",
+    "metadata": "testchain.scale"
   }
 }
