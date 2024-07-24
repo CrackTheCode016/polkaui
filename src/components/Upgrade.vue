@@ -10,15 +10,17 @@ import Card from 'primevue/card';
 import FileUpload from 'primevue/fileupload';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import ProgressSpinner from 'primevue/progressspinner';
 import { stringToHex } from '@polkadot/util';
 import { blake2AsHex } from '@polkadot/util-crypto';
 
-
 enum UpgradeProcess {
     AU,
-    RCR,
     UA,
+}
+
+enum UpgradeStatus {
+    PENDING = "Pending",
+    FINISHED = "Finished",
 }
 
 const typedApi = store.paraClient.getTypedApi(testchain);
@@ -30,17 +32,12 @@ const steps = ref([
     {
         key: UpgradeProcess.AU,
         step: "Authorize Upgrade",
-        status: "Pending"
-    },
-    {
-        key: UpgradeProcess.RCR,
-        step: "Relay Chain Recognized",
-        status: "Pending"
+        status: UpgradeStatus.PENDING
     },
     {
         key: UpgradeProcess.UA,
         step: "Upgrade Applied",
-        status: "Pending"
+        status: UpgradeStatus.PENDING
     }
 ]);
 
@@ -64,12 +61,12 @@ const process = async () => {
             <template #content>
                 <div class="flex flex-column">
                     <br>
-                    <FileUpload ref="runtime" :show-upload-button="false" v-on:remove="(_) => loadedRuntime = false">
+                    <FileUpload ref="runtime" :show-upload-button="false" v-on:remove="(_) => loadedRuntime = false" :show-cancel-button="false">
                         <template #empty>
                             <span>Drag and drop your compressed runtime here.</span>
                         </template>
                     </FileUpload>
-                    <Button v-if="!loadedRuntime" label="Process" @click="process" severity="secondary" />
+                    <Button :disabled="runtime.files.length != 1"  v-if="!loadedRuntime" label="Process" @click="process" severity="secondary" />
                 </div>
                 <br>
 
@@ -85,6 +82,7 @@ const process = async () => {
                     </div>
 
                     <div class="ml-2 w-7">
+                        <p>Hash: {{ hash }}</p>
                         <Card>
                             <template #content>
                                 <DataTable :value="steps" tableStyle="min-width: 50rem">
