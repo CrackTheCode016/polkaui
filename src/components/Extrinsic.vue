@@ -11,6 +11,7 @@ const toast = useToast();
 // Any transaction, any!
 type Transaction = PolkadotApiTransaction<any, any, any, any>;
 
+const emit = defineEmits(["finalized"])
 const props = defineProps<{
     call: Transaction | Transaction[]
     batch: boolean,
@@ -30,6 +31,7 @@ function handleEvents(event: TxEvent) {
     if (event.type == 'broadcasted' || event.type == 'signed' || event.type == 'txBestBlocksState') {
         toast.add({ severity: 'info', summary: event.txHash, detail: event.type, life: 3000 });
     } else if (event.type == 'finalized') {
+        emit('finalized');
         toast.add({ severity: 'success', summary: event.txHash, detail: event.type, life: 3000 });
     } else {
         toast.add({ severity: 'info', summary: "Unknown", detail: "Unknown", life: 3000 });

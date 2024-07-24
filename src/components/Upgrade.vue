@@ -50,6 +50,14 @@ const process = async () => {
     loadedRuntime.value = true;
 };
 
+const updateStatus = (step: UpgradeProcess) => {
+    if (step == UpgradeProcess.AU) {
+        steps.value[0].status = UpgradeStatus.FINISHED
+    } else if (step == UpgradeProcess.UA) {
+        steps.value[1].status = UpgradeStatus.FINISHED
+    }
+}
+
 </script>
 
 <template>
@@ -61,22 +69,24 @@ const process = async () => {
             <template #content>
                 <div class="flex flex-column">
                     <br>
-                    <FileUpload ref="runtime" :show-upload-button="false" v-on:remove="(_) => loadedRuntime = false" :show-cancel-button="false">
+                    <FileUpload ref="runtime" :show-upload-button="false" v-on:remove="(_) => loadedRuntime = false"
+                        :show-cancel-button="false">
                         <template #empty>
                             <span>Drag and drop your compressed runtime here.</span>
                         </template>
                     </FileUpload>
-                    <Button :disabled="runtime.files.length != 1"  v-if="!loadedRuntime" label="Process" @click="process" severity="secondary" />
+                    <Button v-if="!loadedRuntime" label="Process" @click="process"
+                        severity="secondary" />
                 </div>
                 <br>
 
                 <div v-if="loadedRuntime" class="flex justify-content-between">
                     <div class="flex flex-column align-items-start">
-                        <Extrinsic :para="true"
+                        <Extrinsic :para="true" @finalized="updateStatus(UpgradeProcess.AU)"
                             :call='typedApi.tx.Sudo.sudo({ call: typedApi.tx.System.authorize_upgrade({ code_hash: FixedSizeBinary.fromHex(hash) }).decodedCall })'
                             :batch="false" text="Authorize Upgrade" />
                         <br />
-                        <Extrinsic :para="true"
+                        <Extrinsic :para="true" @finalized="updateStatus(UpgradeProcess.UA)"
                             :call='typedApi.tx.Sudo.sudo({ call: typedApi.tx.System.apply_authorized_upgrade({ code: Binary.fromHex(runtimeCode) }).decodedCall })'
                             :batch="false" text="Apply Upgrade" />
                     </div>
