@@ -6,6 +6,7 @@ import { chainSpec as rococo } from "polkadot-api/chains/rococo_v2_2";
 import { startFromWorker } from "polkadot-api/smoldot/from-worker";
 import SmWorker from "polkadot-api/smoldot/worker?worker";
 import { WebSocketProvider } from 'polkadot-api/ws-provider/web';
+import { useToast } from "primevue/usetoast";
 
 // Took from here: https://github.com/polkadot-api/polkadot-api/blob/766cd5686b2ec4d07c82015071eddc6f54c98515/examples/vite/src/main.ts#L21C1-L22C50
 while (!getInjectedExtensions()?.includes("polkadot-js"))
@@ -13,7 +14,7 @@ while (!getInjectedExtensions()?.includes("polkadot-js"))
 
 const pjs = await connectInjectedExtension("polkadot-js");
 const pJsaccounts = pjs.getAccounts();
-export const educhainRpc: string = "ws://127.0.0.1:8833";
+export const educhainRpc: string = "wss://rpc.web3educhain.xyz:443";
 
 const smoldot = startFromWorker(new SmWorker());
 const relay = await smoldot.addChain({ chainSpec: rococo });
