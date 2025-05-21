@@ -6,7 +6,7 @@ import Chip from 'primevue/chip';
 import SelectButton from 'primevue/selectbutton';
 import { onBeforeMount, ref } from "vue";
 import { educhainRpc, modifyParaClientInStore, store } from '../store';
-import { edu, roc, testchain } from "@polkadot-api/descriptors"
+import { edu, paseo, roc } from "@polkadot-api/descriptors"
 import { formatBalance } from "@polkadot/util";
 
 const items = ref([
@@ -29,9 +29,9 @@ const chain = ref('EduChain');
 const options = ref(['EduChain', 'Local']);
 
 const accounts = ref(store.pjsAccounts);
-const relayTypedApi = store.relayClient.getTypedApi(roc);
+const relayTypedApi = store.relayClient.getTypedApi(paseo);
 const paraTypedApi =  store.paraClient.getTypedApi(edu);
-const ticker = ref("ROC");
+const ticker = ref("PAS");
 const paraTicker = ref("EDU");
 const balanceFormatOptions = { withUnit: false, withZeros: false, decimals: 12 };
 let balance = ref("");

@@ -1,8 +1,4 @@
 {
-  "roc": {
-    "chain": "rococo_v2_2",
-    "metadata": "roc.scale"
-  },
   "edu": {
     "wsUrl": "wss://rpc.web3educhain.xyz",
     "metadata": "edu.scale"
@@ -10,5 +6,8 @@
   "testchain": {
     "wsUrl": "ws://127.0.0.1:8833",
     "metadata": "testchain.scale"
+  },
+  "paseo": {
+    "metadata": "paseo.scale"
   }
 }
