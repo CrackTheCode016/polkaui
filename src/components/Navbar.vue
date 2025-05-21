@@ -6,7 +6,7 @@ import Chip from 'primevue/chip';
 import SelectButton from 'primevue/selectbutton';
 import { onBeforeMount, ref } from "vue";
 import { educhainRpc, modifyParaClientInStore, store } from '../store';
-import { edu, paseo, roc } from "@polkadot-api/descriptors"
+import { edu, paseo } from "@polkadot-api/descriptors"
 import { formatBalance } from "@polkadot/util";
 
 const items = ref([

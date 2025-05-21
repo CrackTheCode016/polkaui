@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import Extrinsic from './Extrinsic.vue';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-import { edu, roc, testchain } from '@polkadot-api/descriptors';
+import { edu, testchain } from '@polkadot-api/descriptors';
 import { store } from '../store';
 import { Binary, FixedSizeBinary } from 'polkadot-api';
 import Card from 'primevue/card';
